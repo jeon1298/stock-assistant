@@ -1,0 +1,46 @@
+name: Stock Assistant
+
+on:
+  schedule:
+    # 한국시간 오전 6시 = UTC 오후 9시 (21:00)
+    - cron: '0 21 * * *'
+    # 한국시간 오후 4시 = UTC 오전 7시 (07:00)
+    - cron: '0 7 * * *'
+  # 수동 실행 버튼 (테스트용)
+  workflow_dispatch:
+
+jobs:
+  run-stock-assistant:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 코드 가져오기
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Python 설치
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # 3. 라이브러리 설치
+      - name: Install dependencies
+        run: |
+          pip install yfinance pandas requests feedparser \
+                      schedule python-dotenv google-genai \
+                      deep-translator lxml pykrx
+
+      # 4. 환경변수 설정 (.env 파일 생성)
+      - name: Create .env file
+        run: |
+          echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> .env
+          echo "KAKAO_REST_API_KEY=${{ secrets.KAKAO_REST_API_KEY }}" >> .env
+          echo "KAKAO_ACCESS_TOKEN=${{ secrets.KAKAO_ACCESS_TOKEN }}" >> .env
+          echo "KAKAO_REFRESH_TOKEN=${{ secrets.KAKAO_REFRESH_TOKEN }}" >> .env
+          echo "FRED_API_KEY=${{ secrets.FRED_API_KEY }}" >> .env
+          echo "BOK_API_KEY=${{ secrets.BOK_API_KEY }}" >> .env
+
+      # 5. 메인 실행
+      - name: Run Stock Assistant
+        run: python main.py
