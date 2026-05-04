@@ -7,7 +7,7 @@ sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "script
 
 from stock_screener import screen_stocks, format_for_ai
 from ai_analyzer import analyze_stocks, save_screening_result, load_screening_result
-from kakao_sender import send_report
+from telegram_sender import send_report
 from watchlist_updater import load_watchlist, update_watchlist
 import economic_collector as ec
 import news_collector as nc

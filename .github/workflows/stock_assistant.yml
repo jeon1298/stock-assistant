@@ -32,6 +32,8 @@ jobs:
           echo "KAKAO_REFRESH_TOKEN=${{ secrets.KAKAO_REFRESH_TOKEN }}" >> .env
           echo "FRED_API_KEY=${{ secrets.FRED_API_KEY }}" >> .env
           echo "BOK_API_KEY=${{ secrets.BOK_API_KEY }}" >> .env
+          echo "TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}" >> .env
+          echo "TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}" >> .env
 
       - name: Run Stock Assistant
         run: python main.py
