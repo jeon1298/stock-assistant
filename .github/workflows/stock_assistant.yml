@@ -2,10 +2,8 @@ name: Stock Assistant
 
 on:
   schedule:
-    # 한국시간 오전 6시 = UTC 오후 9시 (21:00)
-    - cron: '0 21 * * *'
-    # 한국시간 오후 4시 = UTC 오전 7시 (07:00)
-    - cron: '0 7 * * *'
+   - cron: '30 20 * * *'  # KST 05:30 실행 → 06:00~06:30 수신
+   - cron: '30 6 * * *'   # KST 15:30 실행 → 16:00~16:30 수신
   # 수동 실행 버튼 (테스트용)
   workflow_dispatch:
 
