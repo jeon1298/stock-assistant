@@ -1,3 +1,4 @@
+name: Stock Assistant
 on:
   schedule:
     # 하루 2번 명시적으로 분리
