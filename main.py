@@ -1,7 +1,7 @@
 import os
 import sys
 import json
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "scripts"))
 
@@ -110,7 +110,8 @@ def collect_etf() -> str:
 
 # ===== 메인 실행 =====
 def run():
-    now = datetime.now()
+    KST = timezone(timedelta(hours=9))
+    now = datetime.now(KST)
     print("=" * 50)
     print(f"🚀 주식 어시스턴트 시작: {now.strftime('%Y-%m-%d %H:%M')} KST")
     print("=" * 50)
