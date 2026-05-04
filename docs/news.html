@@ -1,0 +1,89 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"><title>📰 주식 뉴스</title>
+<style>
+:root {
+  --bg:#0d1117; --surface:#161b22; --border:#30363d;
+  --text:#e6edf3; --muted:#7d8590; --accent:#58a6ff;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background:var(--bg); color:var(--text);
+  font-family:'Noto Sans KR',sans-serif;
+  min-height:100vh; padding:2rem;
+}
+.header {
+  text-align:center; margin-bottom:2.5rem;
+  padding-bottom:1.5rem; border-bottom:1px solid var(--border);
+}
+.header h1 {
+  font-family:'Space Mono',monospace; font-size:1.6rem;
+  color:var(--accent); letter-spacing:2px; margin-bottom:0.5rem;
+}
+.updated { font-size:0.8rem; color:var(--muted); font-family:'Space Mono',monospace; }
+.nav {
+  display:flex; justify-content:center;
+  gap:1rem; margin-bottom:2rem;
+}
+.nav a {
+  color:var(--muted); text-decoration:none; font-size:0.9rem;
+  padding:0.4rem 1rem; border:1px solid var(--border);
+  border-radius:20px; transition:all 0.2s;
+}
+.nav a:hover, .nav a.active { color:var(--accent); border-color:var(--accent); }
+.footer {
+  text-align:center; margin-top:3rem;
+  color:var(--muted); font-size:0.75rem; line-height:1.8;
+}
+</style>
+
+        <style>
+        .filter-bar {
+          display:flex; justify-content:center;
+          gap:0.5rem; margin-bottom:1.5rem;
+        }
+        .filter-btn {
+          background:var(--surface); border:1px solid var(--border);
+          color:var(--muted); padding:0.3rem 0.8rem;
+          border-radius:20px; cursor:pointer; font-size:0.85rem;
+          font-family:'Noto Sans KR',sans-serif; transition:all 0.2s;
+        }
+        .filter-btn:hover, .filter-btn.active { color:var(--accent); border-color:var(--accent); }
+        .news-list {
+          max-width:800px; margin:0 auto;
+          display:flex; flex-direction:column; gap:1rem;
+        }
+        .news-card {
+          background:var(--surface); border:1px solid var(--border);
+          border-radius:8px; padding:1.2rem 1.4rem; transition:transform 0.2s;
+        }
+        .news-card:hover { transform:translateX(4px); border-color:var(--accent); }
+        .news-meta {
+          display:flex; align-items:center;
+          gap:0.6rem; margin-bottom:0.6rem;
+        }
+        .tag {
+          font-size:0.7rem; border:1px solid;
+          padding:0.1rem 0.5rem; border-radius:10px;
+        }
+        .source { font-size:0.75rem; color:var(--muted); }
+        .date {
+          font-size:0.7rem; color:var(--muted);
+          margin-left:auto; font-family:'Space Mono',monospace;
+        }
+        .news-title {
+          display:block; font-size:1rem; font-weight:500;
+          color:var(--text); text-decoration:none;
+          margin-bottom:0.3rem; line-height:1.5;
+        }
+        .news-title:hover { color:var(--accent); }
+        .news-orig {
+          font-size:0.78rem; color:var(--muted);
+          margin-bottom:0.5rem; font-style:italic;
+        }
+        .news-summary {
+          font-size:0.85rem; color:#adbac7; line-height:1.6;
+          border-top:1px solid var(--border);
+          padding-top:0.5rem; margin-top:0.5rem;
+        }
+        </style>
+        </head><body><div class="header"><h1>📰 MARKET NEWS</h1><div class="updated">Last updated: 2026-05-05 01:23 KST</div></div><div class="nav"><a href="index.html">📊 경제지표</a><a href="news.html" class="active">📰 뉴스</a></div><div class="filter-bar"><button class="filter-btn active" onclick="filterNews('all')">전체</button><button class="filter-btn" onclick="filterNews('kr')">🇰🇷 한국</button><button class="filter-btn" onclick="filterNews('us')">🇺🇸 미국</button></div><div class="news-list" id="newsList"><div class="news-card"><div class="news-meta"><span class="tag" style="color:#00c896;border-color:#00c896;">🇰🇷 한국</span><span class="source">연합뉴스_경제</span><span class="date"></span></div><a href="https://www.yna.co.kr/view/AKR20260504129900008" target="_blank" class="news-title">스테이지원엔터, 10억원 제3자배정 유상증자</a><div class="news-orig">스테이지원엔터, 10억원 제3자배정 유상증자</div><div class="news-summary">(서울=연합뉴스) 코스닥 상장사 스테이지원엔터[078860]는 운영자금 등 약 10억원을 조달하고자 제3자배정 유상증자를 결정했다고 4일 공시했...</div></div><div class="news-card"><div class="news-meta"><span class="tag" style="color:#00c896;border-color:#00c896;">🇰🇷 한국</span><span class="source">연합뉴스_경제</span><span class="date"></span></div><a href="https://www.yna.co.kr/view/AKR20260504125351008" target="_blank" class="news-title">한은 부총재 발언에 국고채 금리 일제히 상승…3년물 연 3.615%(종합)</a><div class="news-orig">한은 부총재 발언에 국고채 금리 일제히 상승…3년물 연 3.615%(종합)</div><div class="news-summary">(서울=연합뉴스) 고은지 기자 = 유상대 한국은행 부총재가 기준금리 인상 가능성을 언급하자 4일 국고채 금리가 일제히 상승했다.</div></div><div class="news-card"><div class="news-meta"><span class="tag" style="color:#00c896;border-color:#00c896;">🇰🇷 한국</span><span class="source">연합뉴스_경제</span><span class="date"></span></div><a href="https://www.yna.co.kr/view/AKR20260504126100008" target="_blank" class="news-title">한화에어로스페이스 "한국항공우주산업 주식 5천억에 추가취득"</a><div class="news-orig">한화에어로스페이스 "한국항공우주산업 주식 5천억에 추가취득"</div><div class="news-summary">(서울=연합뉴스) 코스피 상장사 한화에어로스페이스[012450]는 유인 항공기, 항공우주선 및 보조장치 제조업 업체 한국항공우주산업의 주식 29...</div></div><div class="news-card"><div class="news-meta"><span class="tag" style="color:#00c896;border-color:#00c896;">🇰🇷 한국</span><span class="source">매일경제</span><span class="date"></span></div><a href="https://www.mk.co.kr/news/stock/12035346" target="_blank" class="news-title">"어린이날 선물? AI·채권 ETF가 좋죠"</a><div class="news-orig">"어린이날 선물? AI·채권 ETF가 좋죠"</div><div class="news-summary">상장지수펀드(ETF) 시장이 순자산 400조원 시대를 열면서 자녀의 미래를 위한 '증권 계좌' 개설 열풍이 거세다. 이에 매일경제는 4일 삼성·미래에셋·한국투자·KB·한화·키움·N..</div></div><div class="news-card"><div class="news-meta"><span class="tag" style="color:#00c896;border-color:#00c896;">🇰🇷 한국</span><span class="source">매일경제</span><span class="date"></span></div><a href="https://www.mk.co.kr/news/stock/12035345" target="_blank" class="news-title">[코스닥 공시] AP위성</a><div class="news-orig">[코스닥 공시] AP위성</div><div class="news-summary">◇AP위성=63억원 규모 위성통신 단말기 공급 계약.</div></div><div class="news-card"><div class="news-meta"><span class="tag" style="color:#00c896;border-color:#00c896;">🇰🇷 한국</span><span class="source">매일경제</span><span class="date"></span></div><a href="https://www.mk.co.kr/news/society/12035331" target="_blank" class="news-title">어린이 줄었는데, 원가는 급등 … 울고 있는 완구업체</a><div class="news-orig">어린이 줄었는데, 원가는 급등 … 울고 있는 완구업체</div><div class="news-summary">"완구업계가 가뜩이나 어려운데, 올해는 이란 전쟁으로 원자재 가격까지 급등해 어린이날 대목은 기대하기 어려운 상황입니다."
+1980년대 전성기를 구가했던 국내 완구산업이 학령 인구..</div></div><div class="news-card"><div class="news-meta"><span class="tag" style="color:#58a6ff;border-color:#58a6ff;">🇺🇸 미국</span><span class="source">Yahoo_Finance</span><span class="date"></span></div><a href="https://finance.yahoo.com/sectors/technology/live/tech-stocks-today-semiconductor-earnings-ai-boom-musk-altman-fight-100000447.html" target="_blank" class="news-title">오늘의 기술주: AI 붐 속에 초점이 맞춰진 반도체 회사의 실적, 머스크 대 알트만 싸움은 계속됩니다</a><div class="news-orig">오늘의 기술주: AI 붐 속에 초점이 맞춰진 반도체 회사의 실적, 머스크 대 알트만 싸움은 계속됩니다</div><div class="news-summary"></div></div><div class="news-card"><div class="news-meta"><span class="tag" style="color:#58a6ff;border-color:#58a6ff;">🇺🇸 미국</span><span class="source">Yahoo_Finance</span><span class="date"></span></div><a href="https://finance.yahoo.com/markets/stocks/live/stock-market-today-monday-may-4-231452685.html" target="_blank" class="news-title">오늘 주식 시장: 호르무즈 긴장이 고조되면서 다우, S&P 500, 나스닥 하락</a><div class="news-orig">오늘 주식 시장: 호르무즈 긴장이 고조되면서 다우, S&P 500, 나스닥 하락</div><div class="news-summary"></div></div><div class="news-card"><div class="news-meta"><span class="tag" style="color:#58a6ff;border-color:#58a6ff;">🇺🇸 미국</span><span class="source">Yahoo_Finance</span><span class="date"></span></div><a href="https://finance.yahoo.com/markets/live/earnings-live-updates-sp-500-earnings-growth-trend-impresses-100000216.html" target="_blank" class="news-title">수익 실시간 업데이트: S&P 500 수익 성장 추세가 인상적으로 Palantir가 바쁜 한 주를 시작합니다.</a><div class="news-orig">수익 실시간 업데이트: S&P 500 수익 성장 추세가 인상적으로 Palantir가 바쁜 한 주를 시작합니다.</div><div class="news-summary"></div></div><div class="news-card"><div class="news-meta"><span class="tag" style="color:#58a6ff;border-color:#58a6ff;">🇺🇸 미국</span><span class="source">CNBC</span><span class="date"></span></div><a href="https://www.cnbc.com/2026/05/04/berkshire-shares-trade-higher-as-buffett-successor-abel-scores-good-marks-at-meeting-earnings-jump.html" target="_blank" class="news-title">버핏의 후계자 아벨이 회의에서 좋은 점수를 받고 수익이 급등함에 따라 버크셔 주가는 상승세를 보이고 있습니다.</a><div class="news-orig">버핏의 후계자 아벨이 회의에서 좋은 점수를 받고 수익이 급등함에 따라 버크셔 주가는 상승세를 보이고 있습니다.</div><div class="news-summary">투자 커뮤니티의 많은 사람들은 버크셔의 거대한 기업에 대한 Abel의 확고한 이해에 안심했습니다.</div></div><div class="news-card"><div class="news-meta"><span class="tag" style="color:#58a6ff;border-color:#58a6ff;">🇺🇸 미국</span><span class="source">CNBC</span><span class="date"></span></div><a href="https://www.cnbc.com/2026/04/30/what-bettors-think-apple-will-talk-about-on-its-earnings-call.html" target="_blank" class="news-title">Kalshi의 거래자에 따르면 Apple 임원은 중국과 관세에 대해 이야기하지만 접이식 iPhone에 대해서는 논의하지 않을 것입니다.</a><div class="news-orig">Kalshi의 거래자에 따르면 Apple 임원은 중국과 관세에 대해 이야기하지만 접이식 iPhone에 대해서는 논의하지 않을 것입니다.</div><div class="news-summary">Apple은 목요일 종소리 이후 수익을 보고할 예정이며 컨퍼런스 콜은 동부 표준시 기준 오후 5시에 예정되어 있습니다.</div></div><div class="news-card"><div class="news-meta"><span class="tag" style="color:#58a6ff;border-color:#58a6ff;">🇺🇸 미국</span><span class="source">CNBC</span><span class="date"></span></div><a href="https://www.cnbc.com/2026/04/29/traders-brace-for-800-billion-in-earnings-related-stock-movement.html" target="_blank" class="news-title">트레이더들은 8000억 달러의 수익 관련 주식 움직임에 대비하고 있습니다.</a><div class="news-orig">트레이더들은 8000억 달러의 수익 관련 주식 움직임에 대비하고 있습니다.</div><div class="news-summary">수요일 밤은 실적 시즌의 주요 이벤트로, "매그니피센트 7" 중 4개 기업인 알파벳, 아마존, 메타, 마이크로소프트가 보고할 예정입니다.</div></div></div><div class="footer"><p>⚠️ 본 정보는 투자 참고용이며 투자 결정의 책임은 본인에게 있습니다.</p></div><script>function filterNews(type) {  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));  event.target.classList.add("active");  document.querySelectorAll(".news-card").forEach(card => {    const tag = card.querySelector(".tag").textContent;    if (type === "all") card.style.display = "";    else if (type === "kr") card.style.display = tag.includes("한국") ? "" : "none";    else if (type === "us") card.style.display = tag.includes("미국") ? "" : "none";  });}</script></body></html>

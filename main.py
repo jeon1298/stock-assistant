@@ -2,6 +2,7 @@ import os
 import sys
 import json
 from datetime import datetime, timezone, timedelta
+from dashboard_generator import generate_all
 
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "scripts"))
 
@@ -183,8 +184,15 @@ def run():
     )
     print(analysis_result)
 
-    # ── Step 7: 카카오톡 전송 ──
-    print("\n📱 Step 7: 카카오톡 전송")
+    # ── Step 7: 대시보드 생성 ──
+    print("\n🌐 Step 7: 대시보드 생성")
+    try:
+        generate_all(indicators, news_list)
+    except Exception as e:
+        print(f"  ⚠️ 대시보드 생성 실패: {e}")
+
+    # ── Step 8: 텔레그램 전송 ──
+    print("\n📱 Step 8: 텔레그램 전송")
     message = f"""📊 주식 어시스턴트 리포트
 🕐 {now.strftime('%Y-%m-%d %H:%M')} KST
 
