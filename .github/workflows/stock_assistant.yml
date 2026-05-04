@@ -2,8 +2,8 @@ name: Stock Assistant
 on:
   schedule:
     # 하루 2번 명시적으로 분리
-    - cron: '30 20 * * *'  # KST 05:30 → 오전 전송
-    - cron: '30 6 * * *'   # KST 15:30 → 오후 전송
+    - cron: '37 20 * * *'  # KST 05:37 → 오전 전송
+    - cron: '37 6 * * *'   # KST 15:37 → 오후 전송
   workflow_dispatch:
 
 jobs:
