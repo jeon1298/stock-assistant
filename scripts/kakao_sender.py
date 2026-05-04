@@ -44,6 +44,27 @@ def refresh_access_token() -> bool:
         print(f"❌ 토큰 갱신 오류: {e}")
         return False
 
+# ===== 통합 전송 함수 =====
+def send_report(message: str) -> bool:
+    if not KAKAO_ACCESS_TOKEN:
+        print("❌ KAKAO_ACCESS_TOKEN이 없습니다.")
+        return False
+
+    # GitHub Actions 환경에서는 매번 토큰 갱신
+    print("🔄 토큰 갱신 중...")
+    refresh_access_token()
+
+    parts = split_message(message)
+    total = len(parts)
+    print(f"📨 총 {total}개 파트로 분할 전송")
+
+    success = True
+    for i, part in enumerate(parts, 1):
+        print(f"  전송 중 ({i}/{total}) — {len(part)}자")
+        if not send_to_me(part):
+            success = False
+
+    return success
 
 # ===== 단일 메시지 전송 (2000자 제한) =====
 def send_to_me(message: str) -> bool:

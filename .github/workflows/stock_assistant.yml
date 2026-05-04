@@ -1,35 +1,28 @@
-name: Stock Assistant
-
 on:
   schedule:
-   - cron: '30 20 * * *'  # KST 05:30 실행 → 06:00~06:30 수신
-   - cron: '30 6 * * *'   # KST 15:30 실행 → 16:00~16:30 수신
-  # 수동 실행 버튼 (테스트용)
+    # 하루 2번 명시적으로 분리
+    - cron: '30 20 * * *'  # KST 05:30 → 오전 전송
+    - cron: '30 6 * * *'   # KST 15:30 → 오후 전송
   workflow_dispatch:
 
 jobs:
   run-stock-assistant:
     runs-on: ubuntu-latest
-
     steps:
-      # 1. 코드 가져오기
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Python 설치
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      # 3. 라이브러리 설치
       - name: Install dependencies
         run: |
           pip install yfinance pandas requests feedparser \
                       schedule python-dotenv google-genai \
                       deep-translator lxml pykrx
 
-      # 4. 환경변수 설정 (.env 파일 생성)
       - name: Create .env file
         run: |
           echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> .env
@@ -39,6 +32,5 @@ jobs:
           echo "FRED_API_KEY=${{ secrets.FRED_API_KEY }}" >> .env
           echo "BOK_API_KEY=${{ secrets.BOK_API_KEY }}" >> .env
 
-      # 5. 메인 실행
       - name: Run Stock Assistant
         run: python main.py
