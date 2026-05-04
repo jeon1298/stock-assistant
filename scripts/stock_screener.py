@@ -67,6 +67,14 @@ TICKER_NAMES = {
     "319400": "피에스케이홀딩스", "048260": "오스템임플란트", "073640": "테라세미콘",
     "000250": "삼천당제약", "086900": "메디오젠", "950130": "코오롱티슈진",
     "049720": "에이텍", "024840": "KH바텍",
+    # ===== 멀티 에셋 이름 매핑 =====
+    "CL=F": "WTI원유선물", "GC=F": "금선물", "SI=F": "은선물",
+    "HG=F": "구리선물", "NG=F": "천연가스선물",
+    "TLT": "미국장기채ETF", "IEF": "미국중기채ETF",
+    "SHY": "미국단기채ETF", "HYG": "하이일드채권ETF",
+    "UUP": "달러강세ETF", "DX-Y.NYB": "달러인덱스",
+    "XLK": "기술섹터ETF", "XLE": "에너지섹터ETF",
+    "XLF": "금융섹터ETF", "SOXS": "반도체인버스ETF", "ARKK": "ARK혁신ETF",
 }
 
 def get_company_name(ticker_code):
@@ -111,6 +119,15 @@ KR_WATCHLIST = [
     "000250.KQ", "086900.KQ", "950130.KQ", "049720.KQ", "024840.KQ",
 ]
 
+# ===== 멀티 에셋 워치리스트 (중복 제거 / 최종 1개) =====
+MULTI_ASSET_TICKERS = {
+    "원자재": ["CL=F", "GC=F", "SI=F", "HG=F", "NG=F"],
+    "채권ETF": ["TLT", "IEF", "SHY", "HYG"],
+    "달러": ["UUP", "DX-Y.NYB"],
+    "섹터ETF": ["XLK", "XLE", "XLF", "SOXS", "ARKK"],
+}
+
+# ===== RSI 계산 =====
 def calc_rsi(series, period=14):
     delta = series.diff()
     gain = delta.where(delta > 0, 0).rolling(window=period).mean()
@@ -132,6 +149,7 @@ def get_signal(rsi, change_pct, volume_ratio):
         signals.append("약세")
     return "/".join(signals) if signals else "모니터링"
 
+# ===== 주식 스크리닝 =====
 def screen_stocks(watchlist, market_name, currency="$"):
     print(f"\n{'🇺🇸' if market_name == '미국' else '🇰🇷'} {market_name} 주식 스크리닝 시작...")
     results = []
@@ -140,7 +158,6 @@ def screen_stocks(watchlist, market_name, currency="$"):
     for i, ticker in enumerate(watchlist, 1):
         try:
             print(f"  [{i}/{total}] {ticker} 처리중...", end="\r")
-
             data = yf.Ticker(ticker)
             hist = data.history(period="30d")
 
@@ -168,7 +185,6 @@ def screen_stocks(watchlist, market_name, currency="$"):
             is_change = abs(change_pct) >= cfg["min_change_pct"]
 
             if is_volume or is_rsi or is_change:
-                # ✅ 핵심 변경: 티커 코드에서 .KS/.KQ 제거 후 회사명 조회
                 display_ticker = ticker.replace(".KS", "").replace(".KQ", "")
                 company_name = get_company_name(display_ticker)
                 price = round(latest["Close"], 2)
@@ -176,7 +192,7 @@ def screen_stocks(watchlist, market_name, currency="$"):
 
                 results.append({
                     "ticker": display_ticker,
-                    "name": company_name,           # ✅ 회사명 추가
+                    "name": company_name,
                     "market": market_name,
                     "price_str": price_str,
                     "price": price,
@@ -194,14 +210,53 @@ def screen_stocks(watchlist, market_name, currency="$"):
     print(f"\n  ✅ {market_name} 스크리닝 완료: {len(results)}개 선별 → 상위 {len(top)}개 전달")
     return top
 
-def format_for_ai(us_stocks, kr_stocks):
-    """AI 분석용 텍스트 변환"""
+# ===== 멀티 에셋 스크리닝 (신규 추가) =====
+def screen_multi_assets():
+    """원자재/채권ETF/달러/섹터ETF 현황 수집"""
+    print("\n📊 멀티 에셋 스크리닝 시작...")
+    results = {}
+
+    for category, tickers in MULTI_ASSET_TICKERS.items():
+        category_data = []
+        for ticker in tickers:
+            try:
+                hist = yf.Ticker(ticker).history(period="5d")
+                if hist is None or hist.empty or len(hist) < 2:
+                    continue
+
+                latest = hist.iloc[-1]
+                prev = hist.iloc[-2]
+
+                if prev["Close"] == 0:
+                    continue
+
+                change_pct = round((latest["Close"] - prev["Close"]) / prev["Close"] * 100, 2)
+                price = round(latest["Close"], 2)
+                name = get_company_name(ticker)
+
+                category_data.append({
+                    "ticker": ticker,
+                    "name": name,
+                    "price": price,
+                    "change_pct": change_pct,
+                    "direction": "▲" if change_pct > 0 else "▼" if change_pct < 0 else "-",
+                })
+            except Exception:
+                continue
+
+        results[category] = category_data
+        print(f"  ✅ {category}: {len(category_data)}개 수집")
+
+    return results
+
+# ===== AI 분석용 텍스트 변환 =====
+def format_for_ai(us_stocks, kr_stocks, multi_assets=None):
+    """AI 분석용 텍스트 변환 (멀티 에셋 포함)"""
     lines = ["[주식 스크리닝 결과]"]
 
     lines.append("\n🇺🇸 미국 선별 종목:")
     if us_stocks:
         for s in us_stocks:
-            # ✅ "NVDA (엔비디아)" 형태로 출력
             lines.append(
                 f"- {s['ticker']} ({s['name']}) | 가격: {s['price_str']} | "
                 f"등락: {s['change_pct']}% | 거래량비율: {s['volume_ratio']}x | "
@@ -213,7 +268,6 @@ def format_for_ai(us_stocks, kr_stocks):
     lines.append("\n🇰🇷 한국 선별 종목:")
     if kr_stocks:
         for s in kr_stocks:
-            # ✅ "005930 (삼성전자)" 형태로 출력
             lines.append(
                 f"- {s['ticker']} ({s['name']}) | 가격: {s['price_str']} | "
                 f"등락: {s['change_pct']}% | 거래량비율: {s['volume_ratio']}x | "
@@ -222,10 +276,27 @@ def format_for_ai(us_stocks, kr_stocks):
     else:
         lines.append("  선별 종목 없음")
 
+    # ===== 멀티 에셋 섹션 추가 =====
+    if multi_assets:
+        lines.append("\n📊 멀티 에셋 현황:")
+        for category, items in multi_assets.items():
+            if not items:
+                continue
+            lines.append(f"\n  [{category}]")
+            for item in items:
+                lines.append(
+                    f"  - {item['ticker']} ({item['name']}) | "
+                    f"가격: ${item['price']} | "
+                    f"등락: {item['direction']}{abs(item['change_pct'])}%"
+                )
+
     return "\n".join(lines)
 
+# ===== 테스트 실행 =====
 if __name__ == "__main__":
     us = screen_stocks(US_WATCHLIST, "미국")
     kr = screen_stocks(KR_WATCHLIST, "한국")
+    multi = screen_multi_assets()
+
     print("\n===== AI 전달용 요약 =====")
-    print(format_for_ai(us, kr))
+    print(format_for_ai(us, kr, multi))
