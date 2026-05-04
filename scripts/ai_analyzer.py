@@ -158,40 +158,42 @@ def analyze_stocks(
     client = genai.Client(api_key=GEMINI_API_KEY)
 
     for attempt in range(3):
-    try:
-        print(f"🤖 Gemini 애널리스트 팀 분석 중... (시도 {attempt + 1}/3)")
-        response = client.models.generate_content(
-            model=GEMINI_MODEL,
-            config=types.GenerateContentConfig(
-                system_instruction=ANALYST_SYSTEM_PROMPT,
-            ),
-            contents=full_input,
-        )
-        print("✅ 분석 완료!")
-        return response.text
+        try:                    # ← 들여쓰기 4칸
+            print(f"🤖 Gemini 애널리스트 팀 분석 중... (시도 {attempt + 1}/3)")
+            response = client.models.generate_content(
+                model=GEMINI_MODEL,
+                config=types.GenerateContentConfig(
+                    system_instruction=ANALYST_SYSTEM_PROMPT,
+                ),
+                contents=full_input,
+            )
+            print("✅ 분석 완료!")
+            return response.text
 
-    except Exception as e:
-        error_msg = str(e)
+        except Exception as e:
+            error_msg = str(e)
 
-        if "429" in error_msg:
-            if attempt < 2:
-                print("⚠️ 요청 한도 초과 → 30초 후 재시도...")
-                time.sleep(30)
+            if "429" in error_msg:
+                if attempt < 2:
+                    print("⚠️ 요청 한도 초과 → 30초 후 재시도...")
+                    time.sleep(30)
+                else:
+                    return "❌ Gemini 한도 초과: 내일 오전 자동 리셋됩니다."
+
+            elif "503" in error_msg:
+                if attempt < 2:
+                    print("⚠️ Gemini 서버 과부하 → 30초 후 재시도...")
+                    time.sleep(30)
+                else:
+                    return "❌ Gemini 서버 과부하: 잠시 후 다시 실행해주세요."
+
+            elif "404" in error_msg:
+                return f"❌ 모델 없음: {GEMINI_MODEL}"
+
             else:
-                return "❌ Gemini 한도 초과: 내일 오전 자동 리셋됩니다."
+                return f"❌ Gemini 분석 오류: {error_msg}"
 
-        elif "503" in error_msg:  # ✅ 추가
-            if attempt < 2:
-                print("⚠️ Gemini 서버 과부하 → 30초 후 재시도...")
-                time.sleep(30)
-            else:
-                return "❌ Gemini 서버 과부하: 잠시 후 다시 실행해주세요."
-
-        elif "404" in error_msg:
-            return f"❌ 모델 없음: {GEMINI_MODEL}"
-
-        else:
-            return f"❌ Gemini 분석 오류: {error_msg}"
+    return "❌ 분석 실패: 최대 재시도 횟수 초과"
 
 
 # ===== 테스트 실행 =====
