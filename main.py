@@ -182,7 +182,6 @@ def run():
         news_text=news_text,
         etf_text=etf_text,
     )
-    print(analysis_result)
 
     # ── Step 7: 대시보드 생성 ──
     print("\n🌐 Step 7: 대시보드 생성")
@@ -193,19 +192,35 @@ def run():
 
     # ── Step 8: 텔레그램 전송 ──
     print("\n📱 Step 8: 텔레그램 전송")
-    message = f"""📊 주식 어시스턴트 리포트
-🕐 {now.strftime('%Y-%m-%d %H:%M')} KST
 
-{analysis_result}
+    # Gemini 실패 시 백업 알림 전송
+    if analysis_result == "GEMINI_FAILED":
+        fail_msg = (
+            "⚠️ Gemini 분석 실패 알림\n\n"
+            f"🕐 {now.strftime('%Y-%m-%d %H:%M')} KST\n\n"
+            "스크리닝 및 데이터 수집은 완료됐지만\n"
+            "Gemini API 한도 초과 또는 서버 오류로\n"
+            "분석을 완료하지 못했습니다.\n\n"
+            "📊 Claude에게 분석 요청하려면:\n"
+            "아래 링크를 Claude.ai에 공유하세요\n\n"
+            "🔗 https://jeon1298.github.io/stock-assistant/raw_data.json"
+        )
+        send_report(fail_msg)
+        print("⚠️ Gemini 실패 알림 전송 완료")
+        return
 
-⚠️ 본 내용은 투자 참고용이며 투자 결정의 책임은 본인에게 있습니다."""
-
+    # 정상 분석 결과 전송
+    message = (
+        f"📊 주식 어시스턴트 리포트\n"
+        f"🕐 {now.strftime('%Y-%m-%d %H:%M')} KST\n\n"
+        f"{analysis_result}\n\n"
+        f"⚠️ 본 내용은 투자 참고용이며 투자 결정의 책임은 본인에게 있습니다."
+    )
     send_report(message)
 
     print("\n" + "=" * 50)
     print("✅ 모든 작업 완료!")
     print("=" * 50)
-
 
 if __name__ == "__main__":
     run()
