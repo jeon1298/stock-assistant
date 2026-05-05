@@ -6,12 +6,17 @@ on:
     - cron: '37 6 * * *'   # KST 15:37 → 오후 전송
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   run-stock-assistant:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}  # ✅ 추가
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -37,7 +42,7 @@ jobs:
 
       - name: Run Stock Assistant
         run: python main.py
-        
+
       - name: Deploy dashboard to GitHub Pages
         run: |
           git config --global user.name "github-actions"
