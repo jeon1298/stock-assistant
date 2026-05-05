@@ -2,10 +2,10 @@ import os
 import sys
 import json
 from datetime import datetime, timezone, timedelta
-from dashboard_generator import generate_all
 
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "scripts"))
 
+from dashboard_generator import generate_all
 from stock_screener import screen_stocks, format_for_ai
 from ai_analyzer import analyze_stocks, save_screening_result, load_screening_result
 from telegram_sender import send_report
