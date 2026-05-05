@@ -11,20 +11,51 @@ KST = timezone(timedelta(hours=9))
 
 # ===== 경제지표 카드 생성 =====
 def build_cards(indicators: list) -> str:
+    # 가이드 정보
+    GUIDE = {
+        "미국 기준금리":        {"unit": "%",  "guide": "5%↑ 고금리 / 3%↓ 완화적"},
+        "미국 10년물 국채금리": {"unit": "%",  "guide": "4%↑ 주식부담 / 3%↓ 우호적"},
+        "미국 2년물 국채금리":  {"unit": "%",  "guide": "10년물보다 높으면 경기침체 신호"},
+        "달러인덱스 DXY":       {"unit": "pt", "guide": "100↑ 강달러 / 95↓ 약달러"},
+        "WTI 원유":             {"unit": "$",  "guide": "60↓ 침체우려 / 60~90 중립 / 90↑ 인플레압박"},
+        "VIX 공포지수":         {"unit": "pt", "guide": "15↓ 안정 / 15~20 주의 / 20~30 불안 / 30↑ 공포"},
+        "미국 CPI":             {"unit": "pt", "guide": "2% 목표 / 3%↑ 금리인하 지연"},
+        "한국 기준금리":        {"unit": "%",  "guide": "미국 금리차 비교 중요"},
+        "금 가격":              {"unit": "$",  "guide": "상승=안전자산선호 / 하락=위험자산선호"},
+        "구리 가격":            {"unit": "$",  "guide": "상승=경기확장 / 하락=경기위축 선행지표"},
+        "원/달러 환율(시가)":   {"unit": "원", "guide": "1200↓ 원화강세 / 1200~1400 중립 / 1400↑ 원화약세"},
+        "원/달러 환율(종가)":   {"unit": "원", "guide": "1200↓ 원화강세 / 1200~1400 중립 / 1400↑ 원화약세"},
+        "KOSPI":                {"unit": "pt", "guide": "2400↓ 약세 / 2400~2800 중립 / 2800↑ 강세"},
+        "S&P500":               {"unit": "pt", "guide": "4000↓ 약세 / 4000~5500 중립 / 5500↑ 강세"},
+        "NASDAQ100":            {"unit": "pt", "guide": "기술주 방향 / S&P500 대비 기술주 프리미엄 확인"},
+    }
+
     cards = ""
     for item in indicators:
         label  = item.get("label", "")
         value  = item.get("value")
         change = item.get("change", "")
         date   = item.get("date", "")
+        cached = item.get("cached", False)
 
-        # 값 없으면 스킵
+        g     = GUIDE.get(label, {})
+        unit  = g.get("unit", "")
+        guide = g.get("guide", "")
+
+        # 값 없으면 "데이터 없음" 카드 표시
         if value is None:
+            cards += (
+                '<div class="card" style="border-left:3px solid #30363d;background:rgba(48,54,61,0.08);">'
+                '<div class="card-label">' + label + '</div>'
+                '<div class="card-value" style="color:#7d8590;">— 데이터 없음</div>'
+                '<div class="card-guide">' + guide + '</div>'
+                '</div>'
+            )
             continue
 
         # 등락 기반 색상
         try:
-            change_float = float(str(change).replace("%", ""))
+            change_float = float(str(change).replace("%", "").replace("+", ""))
             if change_float > 0:
                 color, bg, icon = "#00c896", "rgba(0,200,150,0.08)", "▲"
             elif change_float < 0:
@@ -34,17 +65,27 @@ def build_cards(indicators: list) -> str:
         except:
             color, bg, icon = "#7b8fa6", "rgba(123,143,166,0.08)", "●"
 
-        guide = str(date)
+        # 이전 캐시값이면 색상 흐리게
+        if cached:
+            color = "#7b8fa6"
+            bg = "rgba(123,143,166,0.05)"
+            cached_badge = '<span style="font-size:0.65rem;color:#7b8fa6;margin-left:4px;">[이전값]</span>'
+        else:
+            cached_badge = ""
 
         cards += (
             '<div class="card" style="border-left:3px solid ' + color + ';background:' + bg + ';">'
-            '<div class="card-label">' + str(label) + '</div>'
-            '<div class="card-value" style="color:' + color + ';">' + icon + ' ' + str(value) + '</div>'
-            '<div class="card-guide">변동: ' + str(change) + ' | ' + guide + '</div>'
+            '<div class="card-label">' + label + cached_badge + '</div>'
+            '<div class="card-value" style="color:' + color + ';">'
+            + icon + ' ' + str(value) + '<span style="font-size:0.9rem;font-weight:400;margin-left:4px;">' + unit + '</span>'
+            '</div>'
+            '<div class="card-change" style="font-size:0.78rem;color:' + color + ';margin-bottom:0.4rem;">'
+            '전일比 ' + str(change) + unit + ' | ' + str(date) +
+            '</div>'
+            '<div class="card-guide">' + guide + '</div>'
             '</div>'
         )
     return cards
-
 
 
 # ===== 뉴스 카드 생성 =====
@@ -154,6 +195,7 @@ def generate_dashboard(indicators: dict, updated_at: str) -> str:
           font-size:1.4rem; font-weight:700; margin-bottom:0.4rem;
         }
         .card-guide { font-size:0.75rem; color:var(--muted); line-height:1.5; }
+        .card-change { font-size:0.78rem; margin-bottom:0.4rem; }
         </style>
         """ +
         '</head><body>' +
