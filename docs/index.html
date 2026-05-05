@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"><title>📊 경제지표 대시보드</title>
+<style>
+:root {
+  --bg:#0d1117; --surface:#161b22; --border:#30363d;
+  --text:#e6edf3; --muted:#7d8590; --accent:#58a6ff;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background:var(--bg); color:var(--text);
+  font-family:'Noto Sans KR',sans-serif;
+  min-height:100vh; padding:2rem;
+}
+.header {
+  text-align:center; margin-bottom:2.5rem;
+  padding-bottom:1.5rem; border-bottom:1px solid var(--border);
+}
+.header h1 {
+  font-family:'Space Mono',monospace; font-size:1.6rem;
+  color:var(--accent); letter-spacing:2px; margin-bottom:0.5rem;
+}
+.updated { font-size:0.8rem; color:var(--muted); font-family:'Space Mono',monospace; }
+.nav {
+  display:flex; justify-content:center;
+  gap:1rem; margin-bottom:2rem;
+}
+.nav a {
+  color:var(--muted); text-decoration:none; font-size:0.9rem;
+  padding:0.4rem 1rem; border:1px solid var(--border);
+  border-radius:20px; transition:all 0.2s;
+}
+.nav a:hover, .nav a.active { color:var(--accent); border-color:var(--accent); }
+.footer {
+  text-align:center; margin-top:3rem;
+  color:var(--muted); font-size:0.75rem; line-height:1.8;
+}
+</style>
+
+        <style>
+        .grid {
+          display:grid;
+          grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+          gap:1rem; max-width:1200px; margin:0 auto;
+        }
+        .card {
+          background:var(--surface); border-radius:8px;
+          padding:1.2rem 1.4rem; border:1px solid var(--border);
+          transition:transform 0.2s;
+        }
+        .card:hover { transform:translateY(-2px); }
+        .card-label {
+          font-size:0.8rem; color:var(--muted);
+          margin-bottom:0.5rem; text-transform:uppercase; letter-spacing:1px;
+        }
+        .card-value {
+          font-family:'Space Mono',monospace;
+          font-size:1.4rem; font-weight:700; margin-bottom:0.4rem;
+        }
+        .card-guide { font-size:0.75rem; color:var(--muted); line-height:1.5; }
+        </style>
+        </head><body><div class="header"><h1>📊 ECONOMIC DASHBOARD</h1><div class="updated">Last updated: 2026-05-05 17:37 KST</div></div><div class="nav"><a href="index.html" class="active">📊 경제지표</a><a href="news.html">📰 뉴스</a></div><div class="grid"><div class="card" style="border-left:3px solid #7b8fa6;background:rgba(123,143,166,0.08);"><div class="card-label">미국 기준금리</div><div class="card-value" style="color:#7b8fa6;">● 3.64</div><div class="card-guide">변동: 0.00 | 2026-04-01</div></div><div class="card" style="border-left:3px solid #ff4d6d;background:rgba(255,77,109,0.08);"><div class="card-label">미국 10년물 국채금리</div><div class="card-value" style="color:#ff4d6d;">▼ 4.39</div><div class="card-guide">변동: -0.01 | 2026-05-01</div></div><div class="card" style="border-left:3px solid #7b8fa6;background:rgba(123,143,166,0.08);"><div class="card-label">미국 2년물 국채금리</div><div class="card-value" style="color:#7b8fa6;">● 3.88</div><div class="card-guide">변동: 0.00 | 2026-05-01</div></div><div class="card" style="border-left:3px solid #ff4d6d;background:rgba(255,77,109,0.08);"><div class="card-label">달러인덱스 DXY</div><div class="card-value" style="color:#ff4d6d;">▼ 118.3926</div><div class="card-guide">변동: -0.28 | 2026-05-01</div></div><div class="card" style="border-left:3px solid #00c896;background:rgba(0,200,150,0.08);"><div class="card-label">WTI 원유</div><div class="card-value" style="color:#00c896;">▲ 99.89</div><div class="card-guide">변동: +1.47 | 2026-04-27</div></div><div class="card" style="border-left:3px solid #00c896;background:rgba(0,200,150,0.08);"><div class="card-label">VIX 공포지수</div><div class="card-value" style="color:#00c896;">▲ 16.99</div><div class="card-guide">변동: +0.10 | 2026-05-01</div></div><div class="card" style="border-left:3px solid #00c896;background:rgba(0,200,150,0.08);"><div class="card-label">미국 CPI</div><div class="card-value" style="color:#00c896;">▲ 330.293</div><div class="card-guide">변동: +2.83 | 2026-03-01</div></div><div class="card" style="border-left:3px solid #00c896;background:rgba(0,200,150,0.08);"><div class="card-label">금 가격</div><div class="card-value" style="color:#00c896;">▲ 4562.7</div><div class="card-guide">변동: +43.2 | 2026-05-05</div></div><div class="card" style="border-left:3px solid #00c896;background:rgba(0,200,150,0.08);"><div class="card-label">구리 가격</div><div class="card-value" style="color:#00c896;">▲ 5.95</div><div class="card-guide">변동: +0.15 | 2026-05-05</div></div><div class="card" style="border-left:3px solid #7b8fa6;background:rgba(123,143,166,0.08);"><div class="card-label">한국 기준금리</div><div class="card-value" style="color:#7b8fa6;">● 2.5</div><div class="card-guide">변동: 0.0 | 2026-04</div></div></div><div class="footer"><p>⚠️ 본 정보는 투자 참고용이며 투자 결정의 책임은 본인에게 있습니다.</p><p>데이터 출처: FRED, 한국은행 ECOS, yfinance</p></div></body></html>
